@@ -32,6 +32,7 @@ class ExceptionListener
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
+
         if ($exception instanceof HttpException) {
             return;
         }
@@ -39,11 +40,9 @@ class ExceptionListener
         if ($event->getRequest()->attributes->has("_controller")) {
             $culprit = $event->getRequest()->attributes->get("_controller");
         }
-        if ($this->client->getEnvironment() != 'prod') {
-            return array($exception, $culprit, $this->client->getEnvironment());
-        } else {
-            $event_id = $this->client->getIdent($this->client->captureException($exception, $culprit, $this->client->getEnvironment()));
-            error_log("[$event_id] " . $exception->getMessage() . ' in: ' . $exception->getFile() . ':' . $exception->getLine());
+
+        if ($this->client->isEnabled()) {
+            $event_id = $this->client->getIdent($this->client->captureException($exception, $culprit));
         }
     }
 }

@@ -13,8 +13,8 @@
 
     <services>
         <service id="sentry.client" class="%sentry.client.class%">
-            <argument>%sentry.dsn%</argument>
-            <argument>%kernel.environment%</argument>
+            <argument></argument> <!-- sentry dsn -->
+            <argument></argument> <!-- enable -->
         </service>
 
         <service id="sentry.exception_listener" class="%sentry.exception_listener.class%">

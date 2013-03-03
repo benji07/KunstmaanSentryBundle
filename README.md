@@ -22,3 +22,16 @@ Add the KunstmaanSentryBundle to your AppKernel.php file:
 ```
 new Kunstmaan\SentryBundle\KunstmaanSentryBundle(),
 ```
+
+Configuration
+-------------------------
+
+Add the followings lines to your `config.yml` file
+
+```yml
+kunstmaan_sentry:
+    enable: true
+    dsn: %sentry_dsn%
+```
+
+You can disable the logging by setting enable to false

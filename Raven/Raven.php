@@ -9,37 +9,41 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class Raven extends Raven_Client
 {
-
     /**
      * @var string
      */
-    private $environment;
+    private $enabled;
 
     /**
-     * @param string $dsn         The dsn
-     * @param string $environment The environment (prod, dev, staging,...)
+     * @param string $dsn     The dsn
+     * @param string $enabled enabled ?
      */
-    public function __construct($dsn, $environment)
+    public function __construct($dsn, $enabled = true)
     {
-        $this->environment = $environment;
-        $options = array();
-        $options['auto_log_stacks'] = true;
+        $this->enabled = $enabled;
+
+        $options = array(
+            'auto_log_stacks' => true,
+            'trace'           => true,
+            'tags'            => array(
+                'php_version'     => phpversion(),
+                'symfony_version' => Kernel::VERSION
+            ),
+
+        );
+
         if (isset($_SERVER["SERVER_NAME"])) {
             $options['name'] = $_SERVER["SERVER_NAME"];
         }
-        $options['tags'] = array(
-            'php_version' => phpversion(),
-            'symfony_version' => Kernel::VERSION
-        );
-        $options['trace'] = true;
+
         parent::__construct($dsn, $options);
     }
 
     /**
      * @return string
      */
-    public function getEnvironment()
+    public function isEnabled()
     {
-        return $this->environment;
+        return $this->enabled;
     }
 }

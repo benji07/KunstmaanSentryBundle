@@ -24,5 +24,10 @@ class KunstmaanSentryExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+
+        $definition = $container->getDefinition('sentry.client');
+
+        $definition->replaceArgument(0, $config['dsn']);
+        $definition->replaceArgument(1, $config['enable']);
     }
 }
